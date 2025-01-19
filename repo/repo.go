@@ -64,6 +64,7 @@ func UpdateTodo(pool *pgxpool.Pool) func(context.Context, *todo.Todo) (*todo.Tod
 
 type TodoQuery todo.TodoQuery
 
+// It is an sql related concern, so we can extend a new struct type from todo.TodoQuery and add reciever functions to it.
 func (t *TodoQuery) Where() squirrel.Eq {
 	where := squirrel.Eq{}
 	if t.ID != uuid.Nil {
