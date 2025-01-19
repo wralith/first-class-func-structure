@@ -60,8 +60,8 @@ func main() {
 
 	app.Group("/todos").
 		Post("/", http.CreateTodo(service.UpsertTodo(repo.InsertTodo(pool)))).
-		Get("/:id", http.GetSingleTodo(service.ListTodos(repo.ListTodos(pool)))).
-		Get("/", http.ListTodos(service.ListTodos(repo.ListTodos(pool)))).
+		Get("/:id", http.GetSingleTodo(repo.ListTodos(pool))).
+		Get("/", http.ListTodos(repo.ListTodos(pool))).
 		Patch("/:id", http.ToggleTodoCompleted(service.ToggleTodoCompleted(repo.ListTodos(pool), repo.UpdateTodo(pool))))
 
 	app.Listen(":8000") // TODO: Add graceful shutdown
