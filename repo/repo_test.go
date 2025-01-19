@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"os"
 	"testing"
@@ -26,11 +27,15 @@ CREATE TABLE todos (
 	updated_at TIMESTAMPTZ NOT NULL,
 	finished_at TIMESTAMPTZ,
 	deadline_at TIMESTAMPTZ,
-	deadline_passed BOOLEAN
+	completed_after_deadline BOOLEAN
 );
 `
 
 func TestMain(m *testing.M) {
+	flag.Parse()
+	if testing.Short() {
+		return
+	}
 	p := postgres.Preset(
 		postgres.WithUser("test", "password"),
 		postgres.WithDatabase("circle"),
