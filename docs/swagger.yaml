@@ -1,0 +1,181 @@
+definitions:
+  http.ErrorResponse:
+    properties:
+      error:
+        type: string
+      errors:
+        items:
+          type: string
+        type: array
+    type: object
+  todo.Todo:
+    properties:
+      category:
+        type: string
+      completed:
+        type: boolean
+      completedAfterDeadline:
+        type: boolean
+      createdAt:
+        type: string
+      deadlineAt:
+        type: string
+      finishedAt:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  todo.UpsertTodoInput:
+    properties:
+      category:
+        type: string
+      deadlineAt:
+        type: string
+      title:
+        minLength: 3
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Swagger Documentation.
+  title: First Class Fuc Structure
+  version: "1.0"
+paths:
+  /todos:
+    get:
+      parameters:
+      - description: Title
+        in: query
+        name: title
+        type: string
+      - description: Completed
+        in: query
+        name: completed
+        type: boolean
+      - description: Category
+        in: query
+        name: category
+        type: string
+      - description: Completed After Deadline
+        in: query
+        name: completed_after_deadline
+        type: boolean
+      - description: Size
+        in: query
+        name: size
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/todo.Todo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: List Todos
+      tags:
+      - Todos
+    post:
+      parameters:
+      - description: Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/todo.UpsertTodoInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/todo.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Create New Todo
+      tags:
+      - Todos
+  /todos/{id}:
+    get:
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/todo.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Get Single Todo By ID
+      tags:
+      - Todos
+    patch:
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/todo.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Toggle Todo By ID
+      tags:
+      - Todos
+swagger: "2.0"

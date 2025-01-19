@@ -35,8 +35,8 @@ func InsertTodo(pool *pgxpool.Pool) func(context.Context, *todo.Todo) (*todo.Tod
 	}
 }
 
-func UpdateTodo(pool *pgxpool.Pool) func(context.Context, *todo.Todo) (todo.Todo, error) {
-	return func(ctx context.Context, t *todo.Todo) (todo.Todo, error) {
+func UpdateTodo(pool *pgxpool.Pool) func(context.Context, *todo.Todo) (*todo.Todo, error) {
+	return func(ctx context.Context, t *todo.Todo) (*todo.Todo, error) {
 		sql, args, err := sq.
 			Update(todosTable).
 			Set("title", t.Title).
@@ -50,15 +50,15 @@ func UpdateTodo(pool *pgxpool.Pool) func(context.Context, *todo.Todo) (todo.Todo
 			Where(squirrel.Eq{"id": t.ID}).
 			ToSql()
 		if err != nil {
-			return todo.Todo{}, err
+			return nil, err
 		}
 
 		_, err = pool.Exec(ctx, sql, args...)
 		if err != nil {
-			return todo.Todo{}, err
+			return nil, err
 		}
 
-		return *t, nil
+		return t, nil
 	}
 }
 

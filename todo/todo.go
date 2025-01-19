@@ -1,10 +1,13 @@
 package todo
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+var ErrTodoNotFound = errors.New("todo not found")
 
 type Todo struct {
 	ID                     uuid.UUID `json:"id"`
@@ -19,7 +22,7 @@ type Todo struct {
 }
 
 type UpsertTodoInput struct {
-	Title      string    `json:"title" query:"title" validate:"required"`
+	Title      string    `json:"title" query:"title" validate:"min=3"`
 	Category   string    `json:"category" query:"category"`
 	DeadlineAt time.Time `json:"deadlineAt" query:"deadline"`
 }
@@ -59,7 +62,7 @@ func (t *Todo) ToggleCompleted() {
 
 // TODO: Range queries is on you to implement haha
 type TodoQuery struct {
-	ID                     uuid.UUID `json:"id" param:"id"`
+	ID                     uuid.UUID `json:"id" uri:"id"`
 	Title                  string    `json:"title" query:"title"`
 	Completed              bool      `json:"completed" query:"completed"`
 	Category               string    `json:"category" query:"category"`

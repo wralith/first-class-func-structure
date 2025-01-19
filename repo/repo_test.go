@@ -76,7 +76,7 @@ func TestCreateUpdateGetFlow(t *testing.T) {
 	query.ID = item.ID
 	items, err := ListTodos(pool)(ctx, query)
 	require.NoError(t, err)
-	got := items[0]
+	got := &items[0]
 	require.Equal(t, item.Title, got.Title)
 	require.Equal(t, item.ID, got.ID)
 
@@ -88,7 +88,7 @@ func TestCreateUpdateGetFlow(t *testing.T) {
 
 	items, err = ListTodos(pool)(ctx, query)
 	require.NoError(t, err)
-	got = items[0]
+	got = &items[0]
 	require.Equal(t, item.Title, got.Title)
 	require.Equal(t, item.ID, got.ID)
 }
